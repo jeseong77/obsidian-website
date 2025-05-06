@@ -1,0 +1,37 @@
+{
+  "name": "obsidian-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/glob": "^8.1.0",
+    "d3": "^7.9.0",
+    "glob": "^11.0.2",
+    "gray-matter": "^4.0.3",
+    "next": "15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-ionicons": "^4.2.1",
+    "reactflow": "^11.11.4",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1",
+    "remark-wiki-link": "^2.0.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/d3": "^7.4.3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

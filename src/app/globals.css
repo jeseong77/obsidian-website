@@ -1,0 +1,78 @@
+/* app/globals.css */
+@import "tailwindcss"; /* Tailwind CSS 임포트 유지 */
+
+/* 기본 변수 정의 (라이트 모드 기본값) */
+:root {
+  /* 색상 팔레트 */
+  --color-sky-blue: #b9d9eb; /* 전역 배경용 */
+  --color-medium-blue: #69b3e7; /* 미선택 파일/노드 */
+  --color-deep-blue: #0072ce; /* 선택된 파일/노드 */
+  --color-dark-navy: #1a3b5f; /* 텍스트용 어두운 네이비 (대비 고려) */
+  --color-light-text: #f8f9fa; /* 다크 모드 텍스트용 */
+  --color-dark-background: #0f172a; /* 다크 모드 배경용 */
+  --color-dark-card: #1e293b; /* 다크 모드 카드 배경 */
+  --color-dark-border: #334155; /* 다크 모드 테두리 */
+  --color-light-card: #ffffff; /* 라이트 모드 카드 배경 */
+  --color-light-border: #dee2e6; /* 라이트 모드 테두리 */
+
+  /* 시멘틱 변수 (라이트 모드) */
+  --background: var(--color-sky-blue); /* 전역 배경 */
+  --foreground: var(--color-dark-navy); /* 기본 텍스트 */
+  --foreground-muted: #495057;
+  --accent-selected: var(--color-deep-blue); /* 선택 항목 강조 */
+  --accent-default: var(--color-medium-blue); /* 기본 항목 강조 */
+  --card-background: var(--color-light-card);
+  --border-color: var(--color-light-border);
+}
+
+/* 다크 모드 설정 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 시멘틱 변수 (다크 모드) */
+    --background: var(--color-dark-background);
+    --foreground: var(--color-light-text);
+    --foreground-muted: #94a3b8;
+    --accent-selected: var(
+      --color-medium-blue
+    ); /* 다크모드에서는 중간 파랑 강조 */
+    --accent-default: var(--color-sky-blue); /* 기본은 가장 밝은 파랑 */
+    --card-background: var(--color-dark-card);
+    --border-color: var(--color-dark-border);
+  }
+}
+
+/* 기본 스타일 적용 */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+/* 링크 스타일 (선택 사항) */
+a {
+  color: var(--accent-selected); /* 선택 강조색 사용 예시 */
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* 내부 링크 스타일 (필요시 조정) */
+.internal-link {
+  color: var(--accent-default); /* 기본 강조색 사용 */
+}
+.internal-link:hover {
+  text-decoration: underline;
+}
+
+/* prose 내부 링크 스타일 조정 (필요시) */
+.prose a,
+.dark\:prose-invert a {
+  /* Tailwind Typography 플러그인 링크 스타일 재정의 필요시 */
+  color: var(--accent-selected);
+}
+.prose .internal-link,
+.dark\:prose-invert .internal-link {
+  color: var(--accent-default);
+}
