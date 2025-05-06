@@ -1,78 +1,127 @@
 /* app/globals.css */
-@import "tailwindcss"; /* Tailwind CSS 임포트 유지 */
+@import "tailwindcss"; /* Tailwind CSS v4+ 임포트 */
 
-/* 기본 변수 정의 (라이트 모드 기본값) */
+/* ==========================================================================
+  색상 변수 정의 (사용자 제공 파란색 계열 적극 활용)
+  ==========================================================================
+*/
+
 :root {
-  /* 색상 팔레트 */
-  --color-sky-blue: #b9d9eb; /* 전역 배경용 */
-  --color-medium-blue: #69b3e7; /* 미선택 파일/노드 */
-  --color-deep-blue: #0072ce; /* 선택된 파일/노드 */
-  --color-dark-navy: #1a3b5f; /* 텍스트용 어두운 네이비 (대비 고려) */
-  --color-light-text: #f8f9fa; /* 다크 모드 텍스트용 */
-  --color-dark-background: #0f172a; /* 다크 모드 배경용 */
-  --color-dark-card: #1e293b; /* 다크 모드 카드 배경 */
-  --color-dark-border: #334155; /* 다크 모드 테두리 */
-  --color-light-card: #ffffff; /* 라이트 모드 카드 배경 */
-  --color-light-border: #dee2e6; /* 라이트 모드 테두리 */
+  /* 기본 유틸리티 색상 */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --outer-background-light: #f0f0f0; /* 넓은 화면 바깥 여백 (라이트) */
 
-  /* 시멘틱 변수 (라이트 모드) */
-  --background: var(--color-sky-blue); /* 전역 배경 */
-  --foreground: var(--color-dark-navy); /* 기본 텍스트 */
-  --foreground-muted: #495057;
-  --accent-selected: var(--color-deep-blue); /* 선택 항목 강조 */
-  --accent-default: var(--color-medium-blue); /* 기본 항목 강조 */
-  --card-background: var(--color-light-card);
-  --border-color: var(--color-light-border);
+  /* 사용자 제공 파란색 팔레트 */
+  --cu-blue-light: #accce6; /* 가장 밝은 파랑 */
+  --cu-blue-medium: #75aadb; /* 중간 파랑 */
+  --cu-blue-dark: #003373; /* 가장 어두운 파랑 (네이비) */
+
+  /* 보조 중립 색상 (필요시 사용, Tailwind Slate 기반) */
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  /* --- 시멘틱 변수 (라이트 모드) --- */
+  --background: var(--color-white);
+  --foreground: var(--cu-blue-dark);
+  --foreground-muted: var(--cu-blue-medium);
+
+  --card-background: var(--color-white);
+  --border-color: var(--cu-blue-light);
+
+  --accent-default: var(--cu-blue-light);
+  --accent-foreground-default: var(--cu-blue-dark);
+
+  /* 라이트 모드 선택 항목: 중간 파랑 배경 + 흰색 텍스트 (이전 답변의 대비 좋은 조합 유지) */
+  --accent-selected: var(--cu-blue-medium);
+  --accent-selected-foreground: var(--color-white);
+
+  --link-color: var(--cu-blue-dark);
+  --link-color-hover: var(--cu-blue-medium);
 }
 
-/* 다크 모드 설정 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* 시멘틱 변수 (다크 모드) */
-    --background: var(--color-dark-background);
-    --foreground: var(--color-light-text);
-    --foreground-muted: #94a3b8;
-    --accent-selected: var(
-      --color-medium-blue
-    ); /* 다크모드에서는 중간 파랑 강조 */
-    --accent-default: var(--color-sky-blue); /* 기본은 가장 밝은 파랑 */
-    --card-background: var(--color-dark-card);
-    --border-color: var(--color-dark-border);
-  }
+/* 다크 모드 설정 (.dark 클래스 기준) */
+.dark:root {
+  /* 사용자 제공 파란색 팔레트는 동일하게 사용 */
+
+  /* --- 시멘틱 변수 (다크 모드) --- */
+  --background: var(--color-slate-950);
+  --foreground: var(--cu-blue-light);
+  --foreground-muted: var(--cu-blue-medium);
+
+  --card-background: var(--color-slate-900);
+  --border-color: var(--cu-blue-dark);
+
+  --accent-default: var(--cu-blue-dark);
+  --accent-foreground-default: var(--cu-blue-light);
+
+  /* 👇 다크 모드 선택 항목 스타일 변경 */
+  --accent-selected: var(
+    --cu-blue-dark
+  ); /* 선택 배경: 더 어두운 파랑 (#003373) */
+  --accent-selected-foreground: var(
+    --cu-blue-light
+  ); /* 선택 텍스트: 더 밝은 파랑 (#accce6) */
+
+  --link-color: var(--cu-blue-medium);
+  --link-color-hover: var(--cu-blue-light);
 }
 
-/* 기본 스타일 적용 */
+/* ==========================================================================
+  기본 스타일 및 기타 스타일 (이하 동일)
+  ==========================================================================
+*/
+
 body {
-  background: var(--background);
+  background-color: var(--outer-background-light);
   color: var(--foreground);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  transition-property: background-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.dark body {
+  background-color: var(--background);
 }
 
-/* 링크 스타일 (선택 사항) */
-a {
-  color: var(--accent-selected); /* 선택 강조색 사용 예시 */
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-/* 내부 링크 스타일 (필요시 조정) */
-.internal-link {
-  color: var(--accent-default); /* 기본 강조색 사용 */
-}
-.internal-link:hover {
-  text-decoration: underline;
-}
-
-/* prose 내부 링크 스타일 조정 (필요시) */
+a,
+.internal-link,
 .prose a,
-.dark\:prose-invert a {
-  /* Tailwind Typography 플러그인 링크 스타일 재정의 필요시 */
-  color: var(--accent-selected);
+.prose .internal-link {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 150ms ease-in-out;
 }
-.prose .internal-link,
-.dark\:prose-invert .internal-link {
-  color: var(--accent-default);
+a:hover,
+.internal-link:hover,
+.prose a:hover,
+.prose .internal-link:hover {
+  text-decoration: underline;
+  color: var(--link-color-hover);
+}
+
+.prose {
+  color: var(--foreground);
+}
+.dark .prose {
+  color: var(--foreground);
+}
+
+/* NoteGraph 컴포넌트 내부 요소들의 부드러운 색상 전환 */
+.note-graph-container svg {
+  transition: background-color 150ms ease-in-out;
+}
+.note-graph-container .links line {
+  transition: stroke 150ms ease-in-out;
+}
+.note-graph-container .nodes circle {
+  transition: fill 150ms ease-in-out;
+}
+.note-graph-container .nodes text {
+  transition: fill 150ms ease-in-out;
 }

@@ -1,5 +1,5 @@
 // components/NoteGraph.tsx
-"use client"; // useRouter 훅을 사용하므로 클라이언트 컴포넌트
+"use client";
 
 import React, { useEffect, useRef, useMemo, useState } from "react";
 import * as d3 from "d3";
@@ -42,6 +42,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
   }, [initialNodes, initialEdges]);
 
   useEffect(() => {
+    // 컨테이너 크기 감지 로직 (변경 없음)
     const currentContainer = containerRef.current;
     if (currentContainer) {
       const updateDimensions = () =>
@@ -57,6 +58,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
   }, []);
 
   useEffect(() => {
+    // D3 렌더링 로직
     const { width, height } = dimensions;
     if (
       !svgRef.current ||
@@ -74,9 +76,10 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
       .attr("width", width)
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height].join(" "))
-      .style("background-color", "white");
+      // 👇 SVG 배경색 CSS 변수 사용
+      .style("background-color", "var(--card-background)");
 
-    svg.selectAll("*").remove();
+    svg.selectAll("*").remove(); // 이전 요소 제거
 
     const simulation = d3
       .forceSimulation<NodeDatum, EdgeDatum>(graphData.nodes)
@@ -93,17 +96,18 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
 
     const g = svg.append("g").attr("class", "everything");
 
+    // 링크 스타일 수정
     const link = g
       .append("g")
-      .attr("class", "links")
+      .attr("class", "links") // CSS 선택용 클래스
       .selectAll("line")
       .data(graphData.edges)
       .join("line")
-      .attr("stroke", "var(--link-color, #999)") // CSS 변수 사용 또는 기본값
+      .attr("stroke", "var(--foreground-muted)") // 👇 링크 색상 변경 (muted 사용)
       .attr("stroke-opacity", 0.6)
       .attr("stroke-width", 1.5);
 
-    // nodeGroup 타입 명시 및 selectAll, join에 제네릭 타입 명시
+    // 노드 그룹 (변경 없음)
     const nodeGroup: d3.Selection<
       SVGGElement,
       NodeDatum,
@@ -111,34 +115,39 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
       unknown
     > = g
       .append("g")
-      .attr("class", "nodes")
-      .selectAll<SVGGElement, unknown>("g.node-item") // selectAll에 제네릭 타입 <GElement, OldDatum> 명시
+      .attr("class", "nodes") // CSS 선택용 클래스
+      .selectAll<SVGGElement, unknown>("g.node-item")
       .data(graphData.nodes)
-      .join<SVGGElement>("g") // join에 제네릭 타입 <EnterGElement> 명시
+      .join<SVGGElement>("g")
       .attr("class", "node-item");
 
+    // 노드 원 스타일 (CSS 변수 적용됨)
     nodeGroup
       .append("circle")
       .attr("r", 12)
-      .attr("fill", (d: NodeDatum) =>
-        d.id === currentNodeId
-          ? "var(--accent-selected)" // <--- 변경된 부분
-          : "var(--accent-default)"
+      .attr(
+        "fill",
+        (d: NodeDatum) =>
+          d.id === currentNodeId
+            ? "var(--accent-selected)"
+            : "var(--accent-default)" // globals.css의 새로운 정의 사용
       )
       .style("cursor", "pointer")
       .on("click", (event, d: NodeDatum) => {
         router.push(`/?note=${d.id}`);
       });
 
+    // 노드 텍스트 스타일 수정
     nodeGroup
       .append("text")
       .text((d: NodeDatum) => d.label)
       .attr("x", 15)
       .attr("y", 5)
       .style("font-size", "10px")
-      .style("fill", "var(--text-color, #333)") // CSS 변수 사용 또는 기본값
+      .style("fill", "var(--foreground)") // 👇 텍스트 색상 변경
       .style("pointer-events", "none");
 
+    // --- 드래그 핸들러 (누락 없이 복원) ---
     const dragHandler = d3
       .drag<SVGGElement, NodeDatum>()
       .on("start", (event, d) => {
@@ -155,24 +164,26 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
         d.fx = null;
         d.fy = null;
       });
+    nodeGroup.call(dragHandler); // 누락 없이 복원
 
-    nodeGroup.call(dragHandler);
-
+    // --- 줌 핸들러 (누락 없이 복원) ---
     const zoomHandler = d3
       .zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.2, 3])
       .filter((event) => {
+        // filter 로직 복원
         const target = event.target as Element | null;
         return target && typeof target.closest === "function"
           ? !target.closest(".node-item")
           : true;
       })
       .on("zoom", (event) => {
+        // on zoom 로직 복원
         g.attr("transform", event.transform.toString());
       });
+    svg.call(zoomHandler); // 누락 없이 복원
 
-    svg.call(zoomHandler);
-
+    // --- 시뮬레이션 tick 함수 (누락 없이 복원) ---
     simulation.on("tick", () => {
       link
         .attr("x1", (d) => (d.source as NodeDatum).x ?? 0)
@@ -182,15 +193,17 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
       nodeGroup.attr("transform", (d) => `translate(${d.x ?? 0},${d.y ?? 0})`);
     });
 
+    // 클린업 함수 (변경 없음)
     return () => {
       simulation.stop();
     };
   }, [graphData, dimensions, currentNodeId, router]);
 
   return (
+    // 👇 컨테이너 div 스타일 수정: 배경색, 테두리색, 트랜지션 추가 및 CSS 선택자용 클래스 추가
     <div
       ref={containerRef}
-      className="w-full h-full border border-gray-700 overflow-hidden"
+      className="note-graph-container w-full h-full border border-[var(--border-color)] bg-[var(--card-background)] overflow-hidden transition-colors duration-150 ease-in-out"
     >
       <svg ref={svgRef} />
     </div>

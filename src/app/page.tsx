@@ -1,18 +1,19 @@
 // app/page.tsx
-import NoteGraph from "../../components/NoteGraph"; // 경로 수정 (@/ 사용)
-import LeftSidebar from "../../components/LeftSidebar"; // 경로 수정 (@/ 사용)
-import { getGraphData, getNoteContent } from "../../lib/notes"; // 경로 수정 (@/ 사용
-
-// 트리 노드 타입을 정의합니다 (LeftSidebar에서도 사용 가능하도록 export 하거나 공유 타입 파일로 분리)
+// "TreeNode" 인터페이스는 여기서 export 하거나, 별도의 types.ts 파일로 분리하여 양쪽에서 임포트할 수 있습니다.
+// 여기서는 HomePageClient에서 '../app/page'로 임포트한다고 가정합니다.
+// 또는, HomePageClientProps와 함께 HomePageClient.tsx 파일로 옮길 수도 있습니다.
 export interface TreeNode {
-  id: string; // 전체 경로 ID (예: 'folder/file')
-  name: string; // 폴더 또는 파일 이름
+  id: string;
+  name: string;
   type: "folder" | "file";
-  children?: TreeNode[]; // 폴더인 경우 하위 노드들
-  depth: number; // 계층 깊이 (들여쓰기용)
+  children?: TreeNode[];
+  depth: number;
 }
 
-// 파일 목록을 트리 구조로 변환하는 함수 (이전과 동일)
+import HomePageClient from "../../components/HomePageClient"; // 경로 주의: 실제 프로젝트 구조에 맞게 수정
+import { getGraphData, getNoteContent } from "../../lib/notes";
+
+// 파일 목록을 트리 구조로 변환하는 함수 (이전과 동일, 여기에 두거나 lib/notes 등으로 옮길 수 있음)
 function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
   const tree: TreeNode[] = [];
   const map = new Map<string, TreeNode>();
@@ -69,55 +70,26 @@ function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
   return tree;
 }
 
-// 페이지 컴포넌트의 props 타입을 Next.js 15+ 변경 사항에 맞게 수정합니다.
-// searchParams는 이제 Promise로 감싸인 객체입니다.
 interface PageProps {
-  // params도 필요하다면 Promise 타입으로 정의해야 합니다:
-  // params: Promise<{ [key: string]: string | string[] | undefined }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function HomePage({
+export default async function HomePageWrapper({
   searchParams: searchParamsPromise,
 }: PageProps) {
-  // searchParamsPromise를 await하여 실제 searchParams 객체를 얻습니다.
   const searchParams = await searchParamsPromise;
-
   const { nodes: initialNodes, edges: initialEdges } = await getGraphData();
-  // 이제 resolved된 searchParams 객체를 사용합니다.
   const requestedNoteId = (searchParams?.note as string) || "Jeseong";
   const currentNote = await getNoteContent(requestedNoteId);
   const treeData = buildFileTree(initialNodes);
 
   return (
-    <main className="flex h-screen w-full">
-      <div className="w-64 h-full border-r border-gray-300 overflow-y-auto flex-shrink-0 bg-gray-50 dark:bg-gray-800">
-        <LeftSidebar treeData={treeData} currentNodeId={requestedNoteId} />
-      </div>
-
-      <div className="flex-1 p-6 overflow-y-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        {currentNote ? (
-          <>
-            <h1 className="text-3xl font-bold mb-4">
-              {currentNote.title || requestedNoteId}
-            </h1>
-            <div
-              className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: currentNote.contentHtml }}
-            />
-          </>
-        ) : (
-          <p>Note {requestedNoteId} not found.</p>
-        )}
-      </div>
-
-      <div className="w-1/3 border-l border-gray-300 h-full flex-shrink-0">
-        <NoteGraph
-          initialNodes={initialNodes}
-          initialEdges={initialEdges}
-          currentNodeId={requestedNoteId}
-        />
-      </div>
-    </main>
+    <HomePageClient
+      initialNodes={initialNodes}
+      initialEdges={initialEdges}
+      currentNote={currentNote}
+      requestedNoteId={requestedNoteId}
+      treeData={treeData}
+    />
   );
 }
