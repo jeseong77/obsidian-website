@@ -1,8 +1,7 @@
 // app/page.tsx
 import NoteGraph from "../../components/NoteGraph"; // 경로 수정 (@/ 사용)
 import LeftSidebar from "../../components/LeftSidebar"; // 경로 수정 (@/ 사용)
-import { getGraphData, getNoteContent } from "../../lib/notes"; // 경로 수정 (@/ 사용)
-// import path from "path";
+import { getGraphData, getNoteContent } from "../../lib/notes"; // 경로 수정 (@/ 사용
 
 // 트리 노드 타입을 정의합니다 (LeftSidebar에서도 사용 가능하도록 export 하거나 공유 타입 파일로 분리)
 export interface TreeNode {
@@ -13,7 +12,7 @@ export interface TreeNode {
   depth: number; // 계층 깊이 (들여쓰기용)
 }
 
-// 파일 목록을 트리 구조로 변환하는 함수
+// 파일 목록을 트리 구조로 변환하는 함수 (이전과 동일)
 function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
   const tree: TreeNode[] = [];
   const map = new Map<string, TreeNode>();
@@ -70,17 +69,22 @@ function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
   return tree;
 }
 
-// 페이지 컴포넌트의 props 타입을 명시적으로 정의합니다.
-// 오류 메시지에서 언급된 'PageProps' 이름을 사용하고, searchParams 타입을 정확하게 지정합니다.
+// 페이지 컴포넌트의 props 타입을 Next.js 15+ 변경 사항에 맞게 수정합니다.
+// searchParams는 이제 Promise로 감싸인 객체입니다.
 interface PageProps {
-  // app/page.tsx (루트 페이지)는 동적 라우트 매개변수(params)를 기본적으로 받지 않습니다.
-  // 만약 필요하다면 params: { [key: string]: string | string[] | undefined }; 등을 추가할 수 있습니다.
-  searchParams?: { [key: string]: string | string[] | undefined };
+  // params도 필요하다면 Promise 타입으로 정의해야 합니다:
+  // params: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function HomePage({ searchParams }: PageProps) {
-  // 정의된 PageProps 타입 사용
+export default async function HomePage({
+  searchParams: searchParamsPromise,
+}: PageProps) {
+  // searchParamsPromise를 await하여 실제 searchParams 객체를 얻습니다.
+  const searchParams = await searchParamsPromise;
+
   const { nodes: initialNodes, edges: initialEdges } = await getGraphData();
+  // 이제 resolved된 searchParams 객체를 사용합니다.
   const requestedNoteId = (searchParams?.note as string) || "Jeseong";
   const currentNote = await getNoteContent(requestedNoteId);
   const treeData = buildFileTree(initialNodes);
