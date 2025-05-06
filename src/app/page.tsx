@@ -16,10 +16,8 @@ export interface TreeNode {
 // 파일 목록을 트리 구조로 변환하는 함수
 function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
   const tree: TreeNode[] = [];
-  // Map<경로, TreeNode> 형식으로 노드를 빠르게 찾기 위함
   const map = new Map<string, TreeNode>();
 
-  // 먼저 모든 노드를 경로 기반으로 Map에 등록 (폴더 포함)
   nodes.forEach((node) => {
     const parts = node.id.split("/");
     let currentPath = "";
@@ -34,70 +32,66 @@ function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
           id: currentPath,
           name: part,
           type: nodeType,
-          depth: i, // 깊이 추가
+          depth: i,
         };
         if (nodeType === "folder") {
-          newNode.children = []; // 폴더면 children 배열 초기화
+          newNode.children = [];
         }
         map.set(currentPath, newNode);
 
-        // 부모 노드 찾아서 children에 추가
         if (i > 0) {
           const parentPath = parts.slice(0, i).join("/");
           const parentNode = map.get(parentPath);
           if (parentNode && parentNode.type === "folder") {
-            parentNode.children!.push(newNode); // ! 사용 (폴더는 항상 children 있음)
+            parentNode.children!.push(newNode);
           }
         } else {
-          // 최상위 노드는 tree 배열에 직접 추가
           tree.push(newNode);
         }
       }
     }
   });
 
-  // 트리 정렬 함수 (폴더 우선, 이름순)
-  const sortTree = (nodes: TreeNode[]) => {
-    nodes.sort((a, b) => {
+  const sortTree = (nodesToSort: TreeNode[]) => {
+    nodesToSort.sort((a, b) => {
       if (a.type !== b.type) {
         return a.type === "folder" ? -1 : 1;
       }
       return a.name.localeCompare(b.name);
     });
-    nodes.forEach((node) => {
+    nodesToSort.forEach((node) => {
       if (node.type === "folder" && node.children) {
         sortTree(node.children);
       }
     });
   };
 
-  sortTree(tree); // 최종 트리 정렬
+  sortTree(tree);
   return tree;
 }
 
-export default async function HomePage({
-  searchParams,
-}: {
+// 페이지 컴포넌트의 props 타입을 명시적으로 정의합니다.
+// 오류 메시지에서 언급된 'PageProps' 이름을 사용하고, searchParams 타입을 정확하게 지정합니다.
+interface PageProps {
+  // app/page.tsx (루트 페이지)는 동적 라우트 매개변수(params)를 기본적으로 받지 않습니다.
+  // 만약 필요하다면 params: { [key: string]: string | string[] | undefined }; 등을 추가할 수 있습니다.
   searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const { nodes: initialNodes, edges: initialEdges } = await getGraphData();
-  const requestedNoteId = (searchParams?.note as string) || "Jeseong"; // Jeseong이 루트 파일이라고 가정
-  const currentNote = await getNoteContent(requestedNoteId);
+}
 
-  // initialNodes를 트리 구조 데이터로 변환
+export default async function HomePage({ searchParams }: PageProps) {
+  // 정의된 PageProps 타입 사용
+  const { nodes: initialNodes, edges: initialEdges } = await getGraphData();
+  const requestedNoteId = (searchParams?.note as string) || "Jeseong";
+  const currentNote = await getNoteContent(requestedNoteId);
   const treeData = buildFileTree(initialNodes);
 
   return (
     <main className="flex h-screen w-full">
-      {/* 왼쪽 사이드바 */}
       <div className="w-64 h-full border-r border-gray-300 overflow-y-auto flex-shrink-0 bg-gray-50 dark:bg-gray-800">
-        {/* LeftSidebar에 treeData와 현재 ID 전달 */}
         <LeftSidebar treeData={treeData} currentNodeId={requestedNoteId} />
       </div>
 
-      {/* 중간 콘텐츠 영역 */}
       <div className="flex-1 p-6 overflow-y-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        {/* ... 콘텐츠 렌더링 (변경 없음) ... */}
         {currentNote ? (
           <>
             <h1 className="text-3xl font-bold mb-4">
@@ -113,9 +107,8 @@ export default async function HomePage({
         )}
       </div>
 
-      {/* 오른쪽 그래프 영역 */}
       <div className="w-1/3 border-l border-gray-300 h-full flex-shrink-0">
-        <NoteGraph /* ... props 전달 (변경 없음) ... */
+        <NoteGraph
           initialNodes={initialNodes}
           initialEdges={initialEdges}
           currentNodeId={requestedNoteId}
