@@ -12,6 +12,8 @@ import rehypePrettyCode, {
 } from "rehype-pretty-code";
 import { glob } from "glob";
 import remarkWikiLink from "remark-wiki-link"; // 위키링크 플러그인 유지
+import remarkGfm from 'remark-gfm';         // 👈 GFM 플러그인 임포트
+import remarkBreaks from 'remark-breaks'; 
 
 const vaultDir = path.join(process.cwd(), "vault");
 
@@ -138,6 +140,8 @@ export async function getNoteContent(
 
     const processedContent = await remark()
       .use(remarkParse)
+      .use(remarkGfm) // 👈 GFM 플러그인 추가 (목록, 테이블 등 지원)
+      .use(remarkBreaks) // 👈 줄바꿈 플러그인 추가 (모든 개행을 <br>로)
       .use(remarkWikiLink, {
         hrefTemplate: (permalink: string) => `/?note=${permalink}`,
         wikiLinkClassName: "internal-link",
