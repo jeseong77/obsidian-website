@@ -2,7 +2,7 @@
 import NoteGraph from "../../components/NoteGraph"; // 경로 수정 (@/ 사용)
 import LeftSidebar from "../../components/LeftSidebar"; // 경로 수정 (@/ 사용)
 import { getGraphData, getNoteContent } from "../../lib/notes"; // 경로 수정 (@/ 사용)
-import path from "path";
+// import path from "path";
 
 // 트리 노드 타입을 정의합니다 (LeftSidebar에서도 사용 가능하도록 export 하거나 공유 타입 파일로 분리)
 export interface TreeNode {

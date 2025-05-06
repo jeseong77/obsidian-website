@@ -7,7 +7,6 @@ import { glob } from "glob";
 import remarkWikiLink from "remark-wiki-link";
 
 const vaultDir = path.join(process.cwd(), "vault");
-console.log("[notes.ts] Vault directory path:", vaultDir);
 
 export interface NodeData {
   id: string; // 이제 '폴더/파일명' 형태가 될 수 있음
@@ -84,7 +83,7 @@ export async function getGraphData(): Promise<{
   // 두 번째 순회: 링크 분석 및 엣지 생성
   files.forEach((relativePath) => {
     const sourceId = relativePath.replace(/\.md$/, "");
-    const sourceDir = path.dirname(relativePath); // 현재 파일의 디렉토리 경로
+    // const sourceDir = path.dirname(relativePath); // 현재 파일의 디렉토리 경로
 
     const fullPath = path.join(vaultDir, relativePath);
     const fileContents = fs.readFileSync(fullPath, "utf8");

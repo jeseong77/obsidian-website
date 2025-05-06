@@ -137,7 +137,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
   return (
     <div className="p-4 bg-gray-100 dark:bg-gray-800 h-full flex flex-col text-gray-800 dark:text-gray-200">
       {/* ... (제목, 검색, 컨트롤 버튼 부분은 이전과 동일) ... */}
-      <h2 className="text-xl font-bold mb-4">Jeseong's Notes</h2>
+      <h2 className="text-xl font-bold mb-4">Jeseong&apos;s Notes</h2>
       <div className="relative mb-4">
         <input
           type="text"
