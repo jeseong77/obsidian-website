@@ -109,7 +109,7 @@ export default async function HomePage({
             />
           </>
         ) : (
-          <p>Note '{requestedNoteId}' not found.</p>
+          <p>Note {requestedNoteId} not found.</p>
         )}
       </div>
 
