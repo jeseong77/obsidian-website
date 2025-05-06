@@ -71,14 +71,14 @@ const TreeItem: React.FC<{
               color={iconColor} // CSS 변수 직접 전달
               height="16px"
               width="16px"
-              cssClasses="mr-1 flex-shrink-0"
+              cssClasses="mr-1 ml-1 flex-shrink-0"
             />
           ) : (
             <FolderOutline
               color={iconColor} // CSS 변수 직접 전달
               height="16px"
               width="16px"
-              cssClasses="mr-1 flex-shrink-0"
+              cssClasses="mr-1 ml-1 flex-shrink-0"
             />
           )}
           {/* 폴더 텍스트: 기본 색상 상속 */}
@@ -115,7 +115,7 @@ const TreeItem: React.FC<{
             color={isCurrentFile ? currentIconColor : iconColor} // 조건부 색상 적용
             height="16px"
             width="16px"
-            cssClasses="mr-1 flex-shrink-0"
+            cssClasses="mr-1 ml-1 flex-shrink-0"
           />
           {/* 텍스트: Link 클래스에 의해 색상 결정됨 */}
           <span className="truncate">{node.name}</span>
