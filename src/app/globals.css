@@ -125,3 +125,248 @@ a:hover,
 .note-graph-container .nodes text {
   transition: fill 150ms ease-in-out;
 }
+.prose p {
+  /* 예시: 기본 prose 마진을 사용하거나, 필요시 여기서 직접 지정 */
+  margin-top: 0.8em; /* 원하는 간격으로 조정 */
+  margin-bottom: 0.8em; /* 원하는 간격으로 조정 */
+}
+.dark .prose p {
+  /* 다크 모드에서도 동일하게 적용하거나 별도 지정 */
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+.prose ul {
+  list-style-type: disc; /* 기본 점 모양 글머리 기호 */
+  padding-left: 1.5em; /* 들여쓰기 (prose 기본값 활용 또는 조정) */
+}
+.prose ul > li {
+  padding-left: 0.5em; /* 글머리 기호와 텍스트 사이 간격 */
+  margin-bottom: 0.75em; /* 각 목록 항목 아래 간격 (약 1.5줄 효과) */
+}
+.prose ul > li::marker {
+  /* 글머리 기호 색상 등 커스텀 */
+  color: var(--foreground-muted);
+}
+
+.dark .prose ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+.dark .prose ul > li {
+  padding-left: 0.5em;
+  margin-bottom: 0.75em;
+}
+.dark .prose ul > li::marker {
+  color: var(--foreground-muted);
+}
+
+/* app/globals.css 에 이어서 추가 */
+
+/* ==========================================================================
+  ol (순서 있는 목록) 스타일링
+  ==========================================================================
+*/
+.prose ol {
+  list-style-type: decimal; /* 숫자 글머리 기호 */
+  padding-left: 1.5em; /* 들여쓰기 (ul과 유사하게) */
+}
+.dark .prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+}
+
+.prose ol > li {
+  padding-left: 0.5em; /* 숫자와 텍스트 사이 간격 */
+  margin-bottom: 0.75em; /* 각 목록 항목 아래 간격 (ul과 유사하게) */
+}
+.dark .prose ol > li {
+  padding-left: 0.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose ol > li::marker {
+  /* 숫자 글머리 기호 색상 */
+  color: var(--foreground-muted);
+  font-weight: 600; /* 숫자를 약간 더 두껍게 (선택 사항) */
+}
+.dark .prose ol > li::marker {
+  color: var(--foreground-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+  코드 블록 (pre, code) 스타일링 (rehype-pretty-code / Shiki 사용 기준)
+  ==========================================================================
+*/
+
+/* rehype-pretty-code가 생성하는 pre 태그 기본 스타일 */
+/* Shiki 테마(예: github-dark)가 대부분의 글자색을 지정하지만, 
+   배경, 패딩, 폰트 등은 여기서 테마와 어울리게 조정합니다. */
+pre[data-rehype-pretty-code-fragment] {
+  @apply p-4 rounded-md overflow-x-auto mb-6 text-sm; /* Tailwind 클래스 활용 */
+  background-color: var(--color-slate-100); /* 라이트 모드 코드 블록 배경 */
+  border: 1px solid var(--border-color); /* 테두리 추가 */
+  /* Shiki가 생성하는 인라인 스타일보다 우선 적용하려면 !important 사용 가능성 (최후의 수단) */
+}
+
+.dark pre[data-rehype-pretty-code-fragment] {
+  background-color: var(--color-slate-900); /* 다크 모드 코드 블록 배경 */
+  /* border-color는 .dark:root의 --border-color를 따름 */
+}
+
+/* globals.css 에 추가 또는 수정된 부분 */
+
+/* rehype-pretty-code가 생성하는 pre 태그 기본 스타일 */
+pre[data-rehype-pretty-code-fragment] {
+  @apply p-4 rounded-md overflow-x-auto mb-6 text-sm;
+  background-color: var(--code-background); /* 👇 수정된 변수 사용 */
+  border: 1px solid var(--border-color);
+}
+
+/* 인라인 코드 스타일 (배경색을 CSS 변수로) */
+:not(pre) > code {
+  @apply px-1.5 py-0.5 rounded-md text-sm;
+  /* accent-default는 호버 배경용이었으므로, 인라인 코드 배경용 변수를 새로 만들거나
+     카드 배경보다 약간 다른 색을 사용하는 것이 좋을 수 있습니다.
+     여기서는 기존 --accent-default를 사용하되, 테마에 맞게 조정될 수 있음을 인지합니다. */
+  background-color: var(--accent-default);
+  color: var(--accent-selected-foreground); /* 선택된 항목의 텍스트 색상 활용 */
+  font-family: theme(
+    "fontFamily.mono",
+    "ui-monospace",
+    "SFMono-Regular",
+    "Menlo",
+    "Monaco",
+    "Consolas",
+    "Liberation Mono",
+    "Courier New",
+    "monospace"
+  );
+}
+
+/* app/globals.css 에 이어서 추가 또는 기존 .prose h1, .prose h2 등 수정 */
+
+/* ==========================================================================
+  Prose 내부 제목(Heading) 태그 스타일링 - 크기 및 간격 조정
+  ==========================================================================
+*/
+
+/* 모든 prose 내부 제목에 공통적으로 적용될 수 있는 스타일 */
+.prose h1,
+.dark .prose h1,
+.prose h2,
+.dark .prose h2,
+.prose h3,
+.dark .prose h3,
+.prose h4,
+.dark .prose h4,
+.prose h5,
+.dark .prose h5,
+.prose h6,
+.dark .prose h6 {
+  color: var(--foreground);
+  transition: color 150ms ease-in-out;
+  /* font-weight는 prose 기본값을 따르거나 여기서 지정 (예: @apply font-bold;) */
+}
+
+/* h1 (페이지의 메인 제목으로 사용될 경우) */
+/* HomePageClient.tsx의 <h1>{title || requestedNoteId}</h1> 부분은 
+   prose 바깥에 있으므로, 해당 h1은 text-3xl 등이 직접 적용됩니다.
+   아래는 마크다운 *내부*의 # 제목에 해당합니다. */
+.prose h1 {
+  @apply text-3xl font-extrabold mb-6 mt-8; /* 예: 더 큰 크기와 충분한 마진 */
+  /* 또는 text-4xl 등 */
+}
+.dark .prose h1 {
+  /* 다크 모드 특별한 스타일이 있다면 여기에 */
+}
+
+/* h2 (## About Me 와 같은 부제목) */
+.prose h2 {
+  @apply text-2xl font-bold mb-4 mt-6; /* 예: 충분히 큰 크기와 적절한 마진 */
+  /* border-bottom: 1px solid var(--border-color); */ /* 선택: 하단 테두리 */
+  /* padding-bottom: theme('spacing.2'); */
+}
+.dark .prose h2 {
+  /* border-bottom-color: var(--border-color); */
+}
+
+/* h3 (### 소제목) */
+.prose h3 {
+  @apply text-xl font-semibold mb-3 mt-5;
+}
+.dark .prose h3 {
+  /* 다크 모드 특별한 스타일 */
+}
+
+/* h4 (#### 더 작은 소제목) */
+.prose h4 {
+  @apply text-lg font-semibold mb-2 mt-4;
+}
+.dark .prose h4 {
+  /* 다크 모드 특별한 스타일 */
+}
+
+/* ==========================================================================
+  Task List (작업 목록) 스타일링 - GFM 플러그인 사용 시
+  ==========================================================================
+*/
+
+/* ... (이전 .task-list-item 스타일 등은 유지) ... */
+.prose ul > li.task-list-item,
+.prose ol > li.task-list-item {
+  list-style-type: none;
+  margin-left: -1.5em;
+  /* display: flex; align-items: flex-start; */ /* 필요시 주석 해제 */
+}
+
+.dark .prose ul > li.task-list-item,
+.dark .prose ol > li.task-list-item {
+  list-style-type: none;
+  margin-left: -1.5em;
+  /* display: flex; align-items: flex-start; */
+}
+
+/* 체크박스 스타일 */
+.prose li > input[type="checkbox"] {
+  @apply mr-2 align-middle cursor-default;
+  width: 1.15em; /* 크기 약간 키움 (선택 사항) */
+  height: 1.15em; /* 크기 약간 키움 (선택 사항) */
+  margin-top: 0.15em; /* 텍스트와의 수직 정렬 미세 조정 */
+
+  /* 👇 체크박스 내부(선택 시) 색상을 테마의 강조색으로 설정 */
+  /* 이 속성은 최신 브라우저에서 잘 작동합니다. */
+  accent-color: var(--accent-selected); /* 선택된 항목 배경색과 동일하게 시도 */
+}
+
+/* 다크 모드 체크박스 */
+.dark .prose li > input[type="checkbox"] {
+  accent-color: var(
+    --accent-selected
+  ); /* 다크 모드 선택 항목 배경색과 동일하게 시도 */
+
+  /* 만약 accent-color가 잘 적용되지 않거나, 
+     체크박스 테두리 등이 배경과 어울리지 않는 경우, 
+     filter를 사용하여 색상을 조정할 수 있습니다. (브라우저 호환성 및 디자인 고려)
+     예: 어두운 배경에서 체크박스가 너무 밝게 보일 때 약간 어둡게 처리
+  */
+  /* filter: brightness(0.8) contrast(1.2); */
+}
+
+/* 체크박스가 체크되었을 때의 스타일 (선택 사항, 더 명확한 구분을 위해) */
+.prose li > input[type="checkbox"]:checked {
+  /* 이미 accent-color로 내부 색상이 지정되었으므로, 
+     추가 스타일은 필요 없을 수 있습니다. */
+  /* border-color: var(--accent-selected); */ /* 테두리 색상도 맞추기 */
+}
+.dark .prose li > input[type="checkbox"]:checked {
+  /* border-color: var(--accent-selected); */
+}
+
+/* 체크박스가 비활성화된 상태 */
+.prose li > input[type="checkbox"]:disabled {
+  opacity: 0.7;
+}
+.dark .prose li > input[type="checkbox"]:disabled {
+  opacity: 0.7;
+}
