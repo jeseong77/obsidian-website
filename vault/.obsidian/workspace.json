@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "컴퓨터과학/CS.md",
+                "file": "Network.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CS"
+              "title": "Network"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "컴퓨터과학/CS.md",
+                "file": "Network.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for CS"
+              "title": "Backlinks for Network"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "컴퓨터과학/CS.md",
+                "file": "Network.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from CS"
+              "title": "Outgoing links from Network"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "컴퓨터과학/CS.md",
+                "file": "Network.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of CS"
+              "title": "Outline of Network"
             }
           }
         ]
@@ -170,6 +170,7 @@
   },
   "active": "ae62ec213225327f",
   "lastOpenFiles": [
+    "컴퓨터과학/CS.md",
     "Jeseong.md",
     "About Me.md",
     "컴퓨터과학/dragonica.md",

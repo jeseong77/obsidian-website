@@ -61,7 +61,7 @@
 
   /* 👇 다크 모드 선택 항목 스타일 변경 */
   --accent-selected: var(
-    --cu-blue-dark
+    --cu-blue-light
   ); /* 선택 배경: 더 어두운 파랑 (#003373) */
   --accent-selected-foreground: var(
     --cu-blue-light

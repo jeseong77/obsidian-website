@@ -1,15 +1,15 @@
 // components/HomePageClient.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; // useEffect는 현재 직접 사용되지 않지만, 향후 필요할 수 있어 유지
 import AppBar from "./AppBar";
 import LeftSidebar from "./LeftSidebar";
 import NoteGraph from "./NoteGraph";
-import type { TreeNode } from "../lib/utils";
+import type { TreeNode } from "../lib/utils"; // 경로를 lib/utils.ts로 가정
 
 // react-markdown 및 플러그인 임포트
 import ReactMarkdown, { type Components } from "react-markdown";
-import Link from "next/link"; // Next.js Link 컴포넌트
+import Link from "next/link";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
@@ -17,18 +17,21 @@ import remarkWikiLink from "remark-wiki-link";
 
 // react-syntax-highlighter 및 스타일 임포트
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism"; // 또는 원하는 테마
+import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { CSSProperties } from "react";
-import { filenameToSlug } from "../lib/utils";
+import { filenameToSlug } from "../lib/utils"; // 경로를 lib/utils.ts로 가정
+
+// 아이콘 임포트 (예시, 실제 사용하는 아이콘 라이브러리 및 아이콘으로 교체)
+import { ScanOutline } from "react-ionicons"; // 또는 Expand, Maximize 등
 
 // HomePageClient props 타입 정의
 interface HomePageClientProps {
-  initialNodes: { id: string; label: string }[]; // 이 initialNodes의 id는 이미 정규화되어 있어야 함
+  initialNodes: { id: string; label: string }[];
   initialEdges: { id: string; source: string; target: string }[];
   title: string;
   markdownContent: string;
-  requestedNoteId: string; // 이 ID도 정규화된 형태여야 함
-  treeData: TreeNode[]; // 이 treeData의 id도 정규화된 형태여야 함
+  requestedNoteId: string;
+  treeData: TreeNode[];
 }
 
 // code 렌더러의 props 타입을 위한 인터페이스
@@ -50,29 +53,21 @@ export default function HomePageClient({
 }: HomePageClientProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  // useEffect는 현재 mounted 상태 확인용으로는 직접 사용하지 않으므로 주석 처리
-  // useEffect(() => {
-  //   // setMounted(true); // AppBar, LeftSidebar 등 개별 컴포넌트에서 처리
-  // }, []);
-
   const toggleMobileSidebar = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen);
   };
 
-  // remark-wiki-link 옵션: permalink를 filenameToId로 변환하여 href 생성
   const wikiLinkOptions = {
-    hrefTemplate: (permalink: string) => `/?note=${filenameToSlug(permalink)}`, // 정규화된 ID 사용
-    wikiLinkClassName: "internal-link", // CSS 클래스
-    // permalinkResolver: (name: string) => [filenameToId(name)], // 필요시 페이지 이름 변환 로직
+    hrefTemplate: (permalink: string) => `/?note=${filenameToSlug(permalink)}`,
+    wikiLinkClassName: "internal-link",
   };
 
-  // ReactMarkdown 커스텀 렌더러 정의
   const customMarkdownComponents: Components = {
     code({ node, inline, className, children, ...props }: CustomCodeProps) {
       const match = /language-(\w+)/.exec(className || "");
       return !inline && match ? (
         <SyntaxHighlighter
-          style={materialDark as any} // 타입 문제 임시 회피
+          style={materialDark as any}
           language={match[1]}
           PreTag="div"
           {...props}
@@ -86,22 +81,18 @@ export default function HomePageClient({
       );
     },
     a: ({ node, children, href, ...props }) => {
-      // remark-wiki-link가 hrefTemplate을 통해 이미 /?note=정규화된id 형태로 href를 생성
       if (href && href.startsWith("/?note=")) {
-        // props에서 className을 분리하여 Link 컴포넌트에 전달
         const { className: anchorClassName, ...restProps } = props;
         return (
           <Link
-            href={href} // 정규화된 ID가 포함된 href
-            {...restProps} // 나머지 props (예: title) 전달
-            // internal-link 클래스와 remark-wiki-link가 추가한 클래스(있다면) 모두 적용
+            href={href}
+            {...restProps}
             className={`internal-link ${anchorClassName || ""}`}
           >
             {children}
           </Link>
         );
       }
-      // 외부 링크 또는 일반 마크다운 링크
       return (
         <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
           {children}
@@ -115,7 +106,7 @@ export default function HomePageClient({
       {/* AppBar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50">
         <AppBar
-          siteTitle="Jeseong's Notes" // 또는 title prop 사용
+          siteTitle="Jeseong's Notes"
           onToggleSidebar={toggleMobileSidebar}
         />
       </div>
@@ -154,6 +145,7 @@ export default function HomePageClient({
 
       {/* Main Content Area (MD 파일 내용 + 그래프) */}
       <main className="flex-1 flex flex-col lg:flex-row overflow-y-auto pt-16 md:pt-0">
+        {/* 중앙 콘텐츠 영역 (MD 파일) */}
         <div className="p-6 bg-[var(--card-background)] text-[var(--foreground)] lg:flex-1 lg:overflow-y-auto transition-colors duration-150 ease-in-out">
           <h1 className="text-3xl font-bold mb-4 text-[var(--foreground)] transition-colors duration-150 ease-in-out">
             {title || requestedNoteId}
@@ -164,12 +156,10 @@ export default function HomePageClient({
                 remarkPlugins={[
                   remarkGfm,
                   remarkBreaks,
-                  [remarkWikiLink, wikiLinkOptions], // 수정된 wikiLinkOptions 전달
+                  [remarkWikiLink, wikiLinkOptions],
                 ]}
-                rehypePlugins={[
-                  rehypeRaw, // HTML 처리용
-                ]}
-                components={customMarkdownComponents} // 커스텀 렌더러 적용
+                rehypePlugins={[rehypeRaw]}
+                components={customMarkdownComponents}
               >
                 {markdownContent}
               </ReactMarkdown>
@@ -182,13 +172,57 @@ export default function HomePageClient({
           </div>
         </div>
 
-        <div className="w-full lg:w-1/3 p-2 border-t border-[var(--border-color)] lg:border-t-0 lg:border-l lg:h-full lg:flex-shrink-0 bg-[var(--card-background)] transition-colors duration-150 ease-in-out">
-          <div className="w-full h-64 md:h-80 lg:h-full">
+        {/* 그래프 영역 - sm, md 화면에서 MD 파일 아래에 표시 (lg에서는 숨김) */}
+        <div className="w-full p-3 border-t border-[var(--border-color)] bg-[var(--card-background)] transition-colors duration-150 ease-in-out lg:hidden">
+          <h2 className="text-lg font-semibold text-[var(--foreground)] mb-2 px-1">
+            Knowledge Graph
+          </h2>
+          <div className="w-full h-64 md:h-80 rounded-md border border-[var(--border-color)] overflow-hidden">
+            {" "}
+            {/* overflow-hidden 추가 */}
             <NoteGraph
               initialNodes={initialNodes}
               initialEdges={initialEdges}
               currentNodeId={requestedNoteId}
             />
+          </div>
+        </div>
+
+        {/* 오른쪽 "Knowledge Tree" 영역 (lg 화면에서만 표시) */}
+        <div className="hidden lg:flex lg:flex-col lg:w-1/3 p-4 border-[var(--border-color)] bg-[var(--card-background)] transition-colors duration-150 ease-in-out">
+          {/* 안쪽 박스에 relative 추가 및 flex-col로 내부 요소 정렬, 둥근 모서리 */}
+          <div className="relative flex-grow p-3 border-l border-[var(--border-color)] shadow-sm flex flex-col ">
+            <div className="flex justify-between items-center mb-2 flex-shrink-0">
+              {" "}
+              {/* 타이틀과 아이콘이 줄어들지 않도록 */}
+              <h2 className="text-lg font-semibold text-[var(--foreground)]">
+                Knowledge Tree
+              </h2>
+              <button
+                onClick={() =>
+                  console.log("Graph expand icon clicked (modal TBD)")
+                }
+                className="p-1 text-[var(--foreground-muted)] hover:text-[var(--foreground)] rounded-md" // 둥근 모서리 추가
+                aria-label="Expand Knowledge Tree"
+              >
+                <ScanOutline color="currentColor" height="20px" width="20px" />
+              </button>
+            </div>
+            {/* NoteGraph를 포함할 내부 div, 높이 조절 */}
+            <div className="flex-grow w-full min-h-0 overflow-hidden rounded-md">
+              {" "}
+              {/* 그래프 컨테이너도 둥근 모서리 및 overflow-hidden */}
+              {/* 예시: lg에서 고정 높이, xl에서 다른 높이. 필요에 맞게 조절 */}
+              <div className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[400px]">
+                {" "}
+                {/* 타이틀 영역 높이(h2+mb-2)를 제외한 나머지 채우기 시도 */}
+                <NoteGraph
+                  initialNodes={initialNodes}
+                  initialEdges={initialEdges}
+                  currentNodeId={requestedNoteId}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -88,11 +88,11 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
         d3
           .forceLink<NodeDatum, EdgeDatum>(graphData.edges)
           .id((d) => d.id)
-          .distance(100)
+          .distance(70)
       )
       .force("charge", d3.forceManyBody().strength(-150))
       .force("center", d3.forceCenter(0, 0))
-      .force("collide", d3.forceCollide<NodeDatum>().radius(25));
+      .force("collide", d3.forceCollide<NodeDatum>().radius(15));
 
     const g = svg.append("g").attr("class", "everything");
 
@@ -124,7 +124,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
     // 노드 원 스타일 (CSS 변수 적용됨)
     nodeGroup
       .append("circle")
-      .attr("r", 12)
+      .attr("r", 6)
       .attr(
         "fill",
         (d: NodeDatum) =>
@@ -141,9 +141,10 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
     nodeGroup
       .append("text")
       .text((d: NodeDatum) => d.label)
-      .attr("x", 15)
-      .attr("y", 5)
+      .attr("x", 0)
+      .attr("y", -14)
       .style("font-size", "10px")
+      .style("text-anchor", "middle")
       .style("fill", "var(--foreground)") // 👇 텍스트 색상 변경
       .style("pointer-events", "none");
 
