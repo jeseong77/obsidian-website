@@ -7,8 +7,9 @@ import { ThemeProvider } from "../../components/ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Obsidian Website",
-  description: "My personal knowledge base",
+  title: "JS Tech Blog",
+  description: "My personal second brain",
+  icons: { icon: "favicon.png" }, // favicon 경로
 };
 
 export default function RootLayout({

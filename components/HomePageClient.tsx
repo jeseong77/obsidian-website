@@ -106,7 +106,7 @@ export default function HomePageClient({
       {/* AppBar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50">
         <AppBar
-          siteTitle="Jeseong's Notes"
+          siteTitle="Jeseong's"
           onToggleSidebar={toggleMobileSidebar}
         />
       </div>
@@ -134,7 +134,7 @@ export default function HomePageClient({
           onClick={toggleMobileSidebar}
           className="mt-auto p-2 w-full text-left bg-[var(--accent-default)] hover:bg-[var(--accent-selected)] text-[var(--foreground)] dark:text-[var(--foreground)] rounded transition-colors duration-150 ease-in-out"
         >
-          닫기
+          Close
         </button>
       </div>
 

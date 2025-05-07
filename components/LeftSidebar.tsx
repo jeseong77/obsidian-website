@@ -159,7 +159,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
   return (
     <div className="p-4 bg-[var(--card-background)] h-full flex flex-col text-[var(--foreground)] transition-colors duration-150 ease-in-out">
       <h2 className="text-xl font-bold mb-4 transition-colors duration-150 ease-in-out">
-        Jeseong&apos;s Notes
+        Jeseong&apos;s
       </h2>
       <div className="relative mb-4">
         <input
