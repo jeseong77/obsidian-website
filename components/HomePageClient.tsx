@@ -105,10 +105,7 @@ export default function HomePageClient({
     <div className="flex flex-col md:flex-row h-screen w-full max-w-screen-xl mx-auto bg-[var(--background)] transition-colors duration-150 ease-in-out">
       {/* AppBar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50">
-        <AppBar
-          siteTitle="Jeseong's"
-          onToggleSidebar={toggleMobileSidebar}
-        />
+        <AppBar siteTitle="Jeseong's" onToggleSidebar={toggleMobileSidebar} />
       </div>
 
       {/* 모바일용 Left Sidebar */}
@@ -191,7 +188,7 @@ export default function HomePageClient({
         {/* 오른쪽 "Knowledge Tree" 영역 (lg 화면에서만 표시) */}
         <div className="hidden lg:flex lg:flex-col lg:w-1/3 p-4 border-[var(--border-color)] bg-[var(--card-background)] transition-colors duration-150 ease-in-out">
           {/* 안쪽 박스에 relative 추가 및 flex-col로 내부 요소 정렬, 둥근 모서리 */}
-          <div className="relative flex-grow p-3 border-l border-[var(--border-color)] shadow-sm flex flex-col ">
+          <div className="relative flex-grow p-3 border border-[var(--border-color)] flex flex-col">
             <div className="flex justify-between items-center mb-2 flex-shrink-0">
               {" "}
               {/* 타이틀과 아이콘이 줄어들지 않도록 */}

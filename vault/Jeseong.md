@@ -1,4 +1,3 @@
 ## [[About Me]]
-
-- [[CS]]
-- [[Network]]
+[[Computer Science]]
+[[Arts]]

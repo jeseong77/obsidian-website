@@ -1,6 +1,11 @@
-***Columbia University in the City of New York***
+Hi
+
+### Education
+Columbia University
 Bachelor of Arts, Computer Science
 
-
-- Co-founded non-profit service provider Jelly, and New York based dating platform Bubble
-- Post internships @ Hanwha Life Group Software Engineering Remote Internship, Techlabs - Amanda team Summer Software Engineer
+### Experience
+Co-founded non-profit startup Jelly
+Lead Tech of New York based dating platform Bubble
+Hanwha Life Insurance Software Engineering Internship 
+Techlabs - Amanda team Summer Software Engineer
