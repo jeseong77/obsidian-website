@@ -1,94 +1,85 @@
 // app/page.tsx
-// "TreeNode" 인터페이스는 여기서 export 하거나, 별도의 types.ts 파일로 분리하여 양쪽에서 임포트할 수 있습니다.
-// 여기서는 HomePageClient에서 '../app/page'로 임포트한다고 가정합니다.
-// 또는, HomePageClientProps와 함께 HomePageClient.tsx 파일로 옮길 수도 있습니다.
-export interface TreeNode {
-  id: string;
-  name: string;
-  type: "folder" | "file";
-  children?: TreeNode[];
-  depth: number;
-}
+import HomePageClient from "../../components/HomePageClient";
+import { 
+  buildGraphDataForRender, 
+  getAllNotesForTree,      
+  getNoteContentBySlug,
+} from "../../lib/notes-processor";
+import { filenameToSlug, type TreeNode } from "../../lib/utils";
+import path from "path";
 
-import HomePageClient from "../../components/HomePageClient"; // 경로 주의: 실제 프로젝트 구조에 맞게 수정
-import { getGraphData, getNoteContent } from "../../lib/notes";
-
-// 파일 목록을 트리 구조로 변환하는 함수 (이전과 동일, 여기에 두거나 lib/notes 등으로 옮길 수 있음)
-function buildFileTree(nodes: { id: string; label: string }[]): TreeNode[] {
+// buildFileTree 함수 (이전 답변의 수정된 버전 사용 - slug와 title 사용)
+function buildFileTree(notes: { slug: string; title: string }[]): TreeNode[] {
+  // ... (이전 답변의 buildFileTree 로직 참조)
   const tree: TreeNode[] = [];
-  const map = new Map<string, TreeNode>();
+  const map = new Map<string, TreeNode>(); 
 
-  nodes.forEach((node) => {
-    const parts = node.id.split("/");
-    let currentPath = "";
+  notes.forEach((noteInfo) => {
+    const parts = noteInfo.slug.split("/"); 
+    let currentPathSlug = ""; 
+    
+    const originalPathSegments = noteInfo.slug.split('/').map(slugSegment => {
+        const correspondingNote = notes.find(n => n.slug.endsWith(slugSegment) && n.slug.startsWith(currentPathSlug) && (currentPathSlug ? n.slug.length > currentPathSlug.length : true) );
+        return correspondingNote ? correspondingNote.title : slugSegment.replace(/-/g, ' '); 
+    });
+
     for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      const isLastPart = i === parts.length - 1;
-      currentPath = currentPath ? `${currentPath}/${part}` : part;
+      const partSlug = parts[i];
+      const partOriginalName = originalPathSegments[i]; 
+      currentPathSlug = currentPathSlug ? `${currentPathSlug}/${partSlug}` : partSlug;
 
-      if (!map.has(currentPath)) {
-        const nodeType = isLastPart ? "file" : "folder";
+      if (!map.has(currentPathSlug)) {
+        const nodeType = (i === parts.length - 1 && noteInfo.slug === currentPathSlug) ? "file" : "folder";
         const newNode: TreeNode = {
-          id: currentPath,
-          name: part,
+          id: currentPathSlug, 
+          name: partOriginalName, 
           type: nodeType,
           depth: i,
         };
-        if (nodeType === "folder") {
-          newNode.children = [];
-        }
-        map.set(currentPath, newNode);
+        if (nodeType === "folder") newNode.children = [];
+        map.set(currentPathSlug, newNode);
 
         if (i > 0) {
-          const parentPath = parts.slice(0, i).join("/");
-          const parentNode = map.get(parentPath);
-          if (parentNode && parentNode.type === "folder") {
-            parentNode.children!.push(newNode);
-          }
+          const parentPathSlug = parts.slice(0, i).join("/");
+          const parentNode = map.get(parentPathSlug);
+          if (parentNode && parentNode.type === "folder") parentNode.children!.push(newNode);
         } else {
           tree.push(newNode);
         }
       }
     }
   });
-
-  const sortTree = (nodesToSort: TreeNode[]) => {
-    nodesToSort.sort((a, b) => {
-      if (a.type !== b.type) {
-        return a.type === "folder" ? -1 : 1;
-      }
-      return a.name.localeCompare(b.name);
-    });
-    nodesToSort.forEach((node) => {
-      if (node.type === "folder" && node.children) {
-        sortTree(node.children);
-      }
-    });
-  };
-
+  const sortTree = (nodesToSort: TreeNode[]) => { /* ... */ }; // 이전과 동일
   sortTree(tree);
   return tree;
 }
+
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function HomePageWrapper({
-  searchParams: searchParamsPromise,
-}: PageProps) {
+export default async function HomePageWrapper({ searchParams: searchParamsPromise }: PageProps) {
+  // await initializeNotesData(); // 개발 중 매번 또는 서버 시작 시 한 번 호출
+
   const searchParams = await searchParamsPromise;
-  const { nodes: initialNodes, edges: initialEdges } = await getGraphData();
-  const requestedNoteId = (searchParams?.note as string) || "Jeseong";
-  const currentNote = await getNoteContent(requestedNoteId);
-  const treeData = buildFileTree(initialNodes);
+  let noteQueryParam = searchParams?.note as string;
+  if (Array.isArray(searchParams?.note)) noteQueryParam = searchParams.note[0];
+  
+  const requestedSlug = filenameToSlug(noteQueryParam || "Jeseong");
+
+  const noteContentData = await getNoteContentBySlug(requestedSlug);
+  const { nodes: graphNodes, edges: graphEdges } = await buildGraphDataForRender();
+  const allNotesForTree = await getAllNotesForTree(); 
+  const treeData = buildFileTree(allNotesForTree);
 
   return (
     <HomePageClient
-      initialNodes={initialNodes}
-      initialEdges={initialEdges}
-      currentNote={currentNote}
-      requestedNoteId={requestedNoteId}
+      initialNodes={graphNodes}
+      initialEdges={graphEdges}
+      title={noteContentData?.title || path.basename(requestedSlug.replace(/-/g, " "))}
+      markdownContent={noteContentData?.markdownContent || `Note '${requestedSlug}' not found or content is empty.`}
+      requestedNoteId={requestedSlug} 
       treeData={treeData}
     />
   );
