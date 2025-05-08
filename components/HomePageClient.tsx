@@ -63,7 +63,7 @@ export default function HomePageClient({
       return `/?note=${slug}`;
     },
     wikiLinkClassName: "internal-link",
-    aliasDivider: "|", // 명시적으로 구분자 지정 (기본값이지만 확인차)
+    aliasDivider: "|",
   };
 
   const customMarkdownComponents: Components = {

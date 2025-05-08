@@ -1,4 +1,3 @@
-// components/NoteGraph.tsx
 "use client";
 
 import React, { useEffect, useRef, useMemo, useState } from "react";
@@ -7,18 +6,18 @@ import { useRouter } from "next/navigation";
 
 // 인터페이스 정의
 interface NodeDatum extends d3.SimulationNodeDatum {
-  id: string;
-  label: string;
+  id: string; // 정규화된 슬러그
+  label: string; // 원본 제목
 }
 interface EdgeDatum extends d3.SimulationLinkDatum<NodeDatum> {
   id: string;
-  source: string | NodeDatum;
-  target: string | NodeDatum;
+  source: string | NodeDatum; // 정규화된 슬러그 참조
+  target: string | NodeDatum; // 정규화된 슬러그 참조
 }
 interface NoteGraphProps {
-  initialNodes: { id: string; label: string }[];
-  initialEdges: { id: string; source: string; target: string }[];
-  currentNodeId?: string | null;
+  initialNodes: { id: string; label: string }[]; // id: slug, label: title
+  initialEdges: { id: string; source: string; target: string }[]; // source/target: slug
+  currentNodeId?: string | null; // 정규화된 슬러그
 }
 
 const NoteGraph: React.FC<NoteGraphProps> = ({
@@ -31,6 +30,9 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const router = useRouter();
 
+  const currentTransformRef = useRef<d3.ZoomTransform>(d3.zoomIdentity);
+  const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+
   const graphData = useMemo(() => {
     const nodes: NodeDatum[] = Array.isArray(initialNodes)
       ? initialNodes.map((n) => ({ ...n }))
@@ -42,14 +44,15 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
   }, [initialNodes, initialEdges]);
 
   useEffect(() => {
-    // 컨테이너 크기 감지 로직 (변경 없음)
     const currentContainer = containerRef.current;
     if (currentContainer) {
-      const updateDimensions = () =>
-        setDimensions({
-          width: currentContainer.clientWidth,
-          height: currentContainer.clientHeight,
-        });
+      const updateDimensions = () => {
+        const newWidth = currentContainer.clientWidth;
+        const newHeight = currentContainer.clientHeight;
+        if (newWidth > 0 && newHeight > 0) {
+          setDimensions({ width: newWidth, height: newHeight });
+        }
+      };
       updateDimensions();
       const resizeObserver = new ResizeObserver(updateDimensions);
       resizeObserver.observe(currentContainer);
@@ -57,29 +60,29 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
     }
   }, []);
 
+  // D3 렌더링 및 업데이트 useEffect
   useEffect(() => {
-    // D3 렌더링 로직
     const { width, height } = dimensions;
+    const svgElement = svgRef.current;
+
     if (
-      !svgRef.current ||
+      !svgElement ||
       graphData.nodes.length === 0 ||
       width === 0 ||
       height === 0
     ) {
-      if (svgRef.current) d3.select(svgRef.current).selectAll("*").remove();
+      if (svgElement) d3.select(svgElement).selectAll("*").remove();
       return;
     }
 
-    const svgElement = svgRef.current;
     const svg = d3
       .select(svgElement)
       .attr("width", width)
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height].join(" "))
-      // 👇 SVG 배경색 CSS 변수 사용
       .style("background-color", "var(--card-background)");
 
-    svg.selectAll("*").remove(); // 이전 요소 제거
+    svg.selectAll("*").remove();
 
     const simulation = d3
       .forceSimulation<NodeDatum, EdgeDatum>(graphData.nodes)
@@ -87,27 +90,25 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
         "link",
         d3
           .forceLink<NodeDatum, EdgeDatum>(graphData.edges)
-          .id((d) => d.id)
+          .id((d: NodeDatum) => d.id)
           .distance(70)
       )
-      .force("charge", d3.forceManyBody().strength(-150))
+      .force("charge", d3.forceManyBody().strength(-120))
       .force("center", d3.forceCenter(0, 0))
       .force("collide", d3.forceCollide<NodeDatum>().radius(15));
 
     const g = svg.append("g").attr("class", "everything");
 
-    // 링크 스타일 수정
     const link = g
       .append("g")
-      .attr("class", "links") // CSS 선택용 클래스
+      .attr("class", "links")
       .selectAll("line")
       .data(graphData.edges)
       .join("line")
-      .attr("stroke", "var(--foreground-muted)") // 👇 링크 색상 변경 (muted 사용)
+      .attr("stroke", "var(--foreground-muted)")
       .attr("stroke-opacity", 0.6)
       .attr("stroke-width", 1.5);
 
-    // 노드 그룹 (변경 없음)
     const nodeGroup: d3.Selection<
       SVGGElement,
       NodeDatum,
@@ -115,93 +116,130 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
       unknown
     > = g
       .append("g")
-      .attr("class", "nodes") // CSS 선택용 클래스
+      .attr("class", "nodes")
       .selectAll<SVGGElement, unknown>("g.node-item")
-      .data(graphData.nodes)
+      .data(graphData.nodes, (d: any) => d.id)
       .join<SVGGElement>("g")
       .attr("class", "node-item");
 
-    // 노드 원 스타일 (CSS 변수 적용됨)
     nodeGroup
       .append("circle")
       .attr("r", 6)
-      .attr(
-        "fill",
-        (d: NodeDatum) =>
-          d.id === currentNodeId
-            ? "var(--accent-selected)"
-            : "var(--accent-default)" // globals.css의 새로운 정의 사용
+      .attr("fill", (d: NodeDatum) =>
+        d.id === currentNodeId
+          ? "var(--accent-selected)"
+          : "var(--accent-default)"
       )
       .style("cursor", "pointer")
       .on("click", (event, d: NodeDatum) => {
         router.push(`/?note=${d.id}`);
       });
 
-    // 노드 텍스트 스타일 수정
     nodeGroup
       .append("text")
       .text((d: NodeDatum) => d.label)
       .attr("x", 0)
-      .attr("y", -14)
-      .style("font-size", "10px")
+      .attr("y", -10)
+      .style("font-size", "9px")
       .style("text-anchor", "middle")
-      .style("fill", "var(--foreground)") // 👇 텍스트 색상 변경
+      .style("fill", (d: NodeDatum) =>
+        d.id === currentNodeId ? "var(--accent-selected)" : "var(--foreground)"
+      )
       .style("pointer-events", "none");
 
-    // --- 드래그 핸들러 (누락 없이 복원) ---
     const dragHandler = d3
       .drag<SVGGElement, NodeDatum>()
-      .on("start", (event, d) => {
+      .on("start", (event, d: NodeDatum) => {
         if (!event.active) simulation.alphaTarget(0.3).restart();
         d.fx = d.x ?? 0;
         d.fy = d.y ?? 0;
       })
-      .on("drag", (event, d) => {
+      .on("drag", (event, d: NodeDatum) => {
         d.fx = event.x;
         d.fy = event.y;
       })
-      .on("end", (event, d) => {
+      .on("end", (event, d: NodeDatum) => {
         if (!event.active) simulation.alphaTarget(0);
         d.fx = null;
         d.fy = null;
       });
-    nodeGroup.call(dragHandler); // 누락 없이 복원
+    nodeGroup.call(dragHandler);
 
-    // --- 줌 핸들러 (누락 없이 복원) ---
-    const zoomHandler = d3
+    const zoomBehavior = d3
       .zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.2, 3])
-      .filter((event) => {
-        // filter 로직 복원
-        const target = event.target as Element | null;
-        return target && typeof target.closest === "function"
-          ? !target.closest(".node-item")
-          : true;
-      })
+      .filter((event) => !event.target.closest(".node-item"))
       .on("zoom", (event) => {
-        // on zoom 로직 복원
         g.attr("transform", event.transform.toString());
+        currentTransformRef.current = event.transform;
       });
-    svg.call(zoomHandler); // 누락 없이 복원
+    svg.call(zoomBehavior);
+    zoomRef.current = zoomBehavior;
 
-    // --- 시뮬레이션 tick 함수 (누락 없이 복원) ---
     simulation.on("tick", () => {
       link
         .attr("x1", (d) => (d.source as NodeDatum).x ?? 0)
         .attr("y1", (d) => (d.source as NodeDatum).y ?? 0)
         .attr("x2", (d) => (d.target as NodeDatum).x ?? 0)
         .attr("y2", (d) => (d.target as NodeDatum).y ?? 0);
-      nodeGroup.attr("transform", (d) => `translate(${d.x ?? 0},${d.y ?? 0})`);
+      nodeGroup.attr(
+        "transform",
+        (d: NodeDatum) => `translate(${d.x ?? 0},${d.y ?? 0})`
+      );
     });
 
-    // 클린업 함수 (변경 없음)
     return () => {
       simulation.stop();
     };
   }, [graphData, dimensions, currentNodeId, router]);
 
+  // currentNodeId 변경 시 중앙으로 이동시키는 useEffect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (
+        !svgRef.current ||
+        !zoomRef.current ||
+        !currentNodeId ||
+        graphData.nodes.length === 0 ||
+        dimensions.width === 0 ||
+        dimensions.height === 0
+      ) {
+        return;
+      }
+
+      const svg = d3.select(svgRef.current);
+      const zoomBehavior = zoomRef.current;
+      const currentTransform = currentTransformRef.current;
+      const targetNode = graphData.nodes.find(
+        (node) => node.id === currentNodeId
+      );
+
+      if (
+        targetNode &&
+        typeof targetNode.x === "number" &&
+        typeof targetNode.y === "number"
+      ) {
+        const targetX = targetNode.x;
+        const targetY = targetNode.y;
+        const currentScale = currentTransform.k;
+
+        const newX = 0 - targetX * currentScale;
+        const newY = 0 - targetY * currentScale;
+        const newTransform = d3.zoomIdentity
+          .translate(newX, newY)
+          .scale(currentScale);
+
+        svg
+          .transition()
+          .duration(750)
+          .call(zoomBehavior.transform, newTransform);
+      }
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [currentNodeId, graphData.nodes, dimensions]);
+
   return (
-    // 👇 컨테이너 div 스타일 수정: 배경색, 테두리색, 트랜지션 추가 및 CSS 선택자용 클래스 추가
     <div
       ref={containerRef}
       className="note-graph-container w-full h-full border border-[var(--border-color)] bg-[var(--card-background)] overflow-hidden transition-colors duration-150 ease-in-out"
