@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Arts/문학.md",
+                "file": "About Me.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "문학"
+              "title": "About Me"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Arts/문학.md",
+                "file": "About Me.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 문학"
+              "title": "Backlinks for About Me"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Arts/문학.md",
+                "file": "About Me.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 문학"
+              "title": "Outgoing links from About Me"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Arts/문학.md",
+                "file": "About Me.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 문학"
+              "title": "Outline of About Me"
             }
           }
         ]
@@ -183,10 +183,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8047ee716ed975eb",
+  "active": "b3253cec6dc3887d",
   "lastOpenFiles": [
-    "Arts.md",
     "Arts/문학.md",
+    "Arts.md",
     "Jeseong.md",
     "Arts/미학.md",
     "Arts",
