@@ -58,8 +58,12 @@ export default function HomePageClient({
   };
 
   const wikiLinkOptions = {
-    hrefTemplate: (permalink: string) => `/?note=${filenameToSlug(permalink)}`,
+    hrefTemplate: (permalink: string) => {
+      const slug = filenameToSlug(permalink);
+      return `/?note=${slug}`;
+    },
     wikiLinkClassName: "internal-link",
+    aliasDivider: "|", // 명시적으로 구분자 지정 (기본값이지만 확인차)
   };
 
   const customMarkdownComponents: Components = {
