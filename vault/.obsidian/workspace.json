@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Arts/미학.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Jeseong"
+              "title": "미학"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Arts/미학.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Jeseong"
+              "title": "Backlinks for 미학"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Arts/미학.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Jeseong"
+              "title": "Outgoing links from 미학"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Arts/미학.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Jeseong"
+              "title": "Outline of 미학"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "b3253cec6dc3887d",
   "lastOpenFiles": [
-    "Jeseong.md",
     "Arts.md",
+    "Jeseong.md",
     "About Me.md",
     "컴퓨터과학/Algorithms.md",
     "컴퓨터과학/Computer Architecture.md",
