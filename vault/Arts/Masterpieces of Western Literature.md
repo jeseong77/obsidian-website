@@ -1,0 +1,1 @@
+This is the first core class of Columbia University. Under the supervision of the professor Caio M. Perreira, senior lecturer of french literature, the class was held every week. This class delves deep into selected pieces of western literature from the ancient epic poem Iliads to modern fiction novel Song of Solomon. 

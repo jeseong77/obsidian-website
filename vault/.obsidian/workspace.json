@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Arts/미학.md",
+                "file": "Arts.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "미학"
+              "title": "Arts"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Arts/미학.md",
+                "file": "Arts.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 미학"
+              "title": "Backlinks for Arts"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Arts/미학.md",
+                "file": "Arts.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 미학"
+              "title": "Outgoing links from Arts"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Arts/미학.md",
+                "file": "Arts.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 미학"
+              "title": "Outline of Arts"
             }
           }
         ]
@@ -185,13 +185,14 @@
   },
   "active": "b3253cec6dc3887d",
   "lastOpenFiles": [
+    "Arts/Masterpieces of Western Literature.md",
+    "Arts/미학.md",
     "Arts.md",
     "Jeseong.md",
     "About Me.md",
     "컴퓨터과학/Algorithms.md",
     "컴퓨터과학/Computer Architecture.md",
     "Arts/문학.md",
-    "Arts/미학.md",
     "Arts",
     "Computer Science.md",
     "컴퓨터과학/Computer Networks.md",
