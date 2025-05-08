@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "About Me.md",
+                "file": "Jeseong.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "About Me"
+              "title": "Jeseong"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "About Me.md",
+                "file": "Jeseong.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for About Me"
+              "title": "Backlinks for Jeseong"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "About Me.md",
+                "file": "Jeseong.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from About Me"
+              "title": "Outgoing links from Jeseong"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "About Me.md",
+                "file": "Jeseong.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of About Me"
+              "title": "Outline of Jeseong"
             }
           }
         ]
@@ -185,13 +185,13 @@
   },
   "active": "b3253cec6dc3887d",
   "lastOpenFiles": [
+    "About Me.md",
     "Arts/문학.md",
     "Arts.md",
     "Jeseong.md",
     "Arts/미학.md",
     "Arts",
     "Computer Science.md",
-    "About Me.md",
     "컴퓨터과학/Algorithms.md",
     "컴퓨터과학/Computer Architecture.md",
     "컴퓨터과학/Computer Networks.md",

@@ -94,7 +94,7 @@ a,
 .prose a,
 .prose .internal-link {
   color: var(--link-color);
-  text-decoration: none;
+  text-decoration: underline;
   transition: color 150ms ease-in-out;
 }
 a:hover,
