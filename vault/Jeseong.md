@@ -4,4 +4,4 @@ In case you are curious [[About Me|about me]].
 
 These are my knowledge bank. I share this with you.
 [[Computer Science]]
-[[Arts]]
+[[Arts & Trivials]]

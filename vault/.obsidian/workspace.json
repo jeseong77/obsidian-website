@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Arts.md",
+                "file": "Arts & Trivials.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Arts"
+              "title": "Arts & Trivials"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Arts.md",
+                "file": "Arts & Trivials.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Arts"
+              "title": "Backlinks for Arts & Trivials"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Arts.md",
+                "file": "Arts & Trivials.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Arts"
+              "title": "Outgoing links from Arts & Trivials"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Arts.md",
+                "file": "Arts & Trivials.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Arts"
+              "title": "Outline of Arts & Trivials"
             }
           }
         ]
@@ -187,7 +187,7 @@
   "lastOpenFiles": [
     "Arts/Masterpieces of Western Literature.md",
     "Arts/미학.md",
-    "Arts.md",
+    "Arts & Trivials.md",
     "Jeseong.md",
     "About Me.md",
     "컴퓨터과학/Algorithms.md",
