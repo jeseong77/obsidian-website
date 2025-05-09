@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Studies.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Jeseong"
+              "title": "Studies"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Studies.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Jeseong"
+              "title": "Backlinks for Studies"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Studies.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Jeseong"
+              "title": "Outgoing links from Studies"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Jeseong.md",
+                "file": "Studies.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Jeseong"
+              "title": "Outline of Studies"
             }
           }
         ]
@@ -185,6 +185,8 @@
   },
   "active": "b3253cec6dc3887d",
   "lastOpenFiles": [
+    "Jeseong.md",
+    "Studies.md",
     "Arts.md",
     "Arts/Masterpieces of Western Literature.md",
     "Computer Science/Computer Networks.md",
@@ -194,7 +196,6 @@
     "Computer Science.md",
     "Computer Science/Operating Systems",
     "Arts/미학.md",
-    "Jeseong.md",
     "About Me.md",
     "Computer Science/Algorithms.md",
     "Computer Science/Computer Architecture.md",

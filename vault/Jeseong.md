@@ -3,3 +3,4 @@
 ### 지식은행:
 [[Computer Science]]
 [[Arts]]
+[[Studies]]
