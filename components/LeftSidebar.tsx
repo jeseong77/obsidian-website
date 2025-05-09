@@ -72,7 +72,7 @@ const TreeItem: React.FC<{
                 }
                 height="16px"
                 width="16px"
-                cssClasses="flex-shrink-0 mx-1"
+                cssClasses="flex-shrink-0 ml-1"
               />
             ) : (
               <FolderOutline
@@ -83,7 +83,7 @@ const TreeItem: React.FC<{
                 }
                 height="16px"
                 width="16px"
-                cssClasses="flex-shrink-0 mx-1"
+                cssClasses="flex-shrink-0 ml-1"
               />
             )}
           </span>
