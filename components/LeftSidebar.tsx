@@ -61,7 +61,7 @@ const TreeItem: React.FC<{
               e.stopPropagation(); // Link 클릭 이벤트 전파 방지
               toggleFolder(node.id);
             }}
-            className="cursor-pointer mx-1 p-1 -ml-1" // 클릭 영역 확보 및 마진 조정
+            className="cursor-pointer mx-1" // 클릭 영역 확보 및 마진 조정
           >
             {isExpanded ? (
               <FolderOpenOutline
@@ -72,7 +72,7 @@ const TreeItem: React.FC<{
                 }
                 height="16px"
                 width="16px"
-                cssClasses="flex-shrink-0 ml-1"
+                cssClasses="flex-shrink-0"
               />
             ) : (
               <FolderOutline
@@ -83,7 +83,7 @@ const TreeItem: React.FC<{
                 }
                 height="16px"
                 width="16px"
-                cssClasses="flex-shrink-0 ml-1"
+                cssClasses="flex-shrink-0"
               />
             )}
           </span>
