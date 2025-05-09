@@ -23,6 +23,7 @@ import { filenameToSlug } from "../lib/utils"; // 경로를 lib/utils.ts로 가�
 
 // 아이콘 임포트 (예시, 실제 사용하는 아이콘 라이브러리 및 아이콘으로 교체)
 import { ScanOutline } from "react-ionicons"; // 또는 Expand, Maximize 등
+import type { ProcessedNode } from "../lib/notes-processor";
 
 // HomePageClient props 타입 정의
 interface HomePageClientProps {
@@ -32,6 +33,8 @@ interface HomePageClientProps {
   markdownContent: string;
   requestedNoteId: string;
   treeData: TreeNode[];
+  notesMapByFullPathSlug: Map<string, ProcessedNode> | null; // 타입 추가
+  notesMapBySimpleSlug: Map<string, Set<string>> | null;
 }
 
 // code 렌더러의 props 타입을 위한 인터페이스
@@ -50,6 +53,8 @@ export default function HomePageClient({
   markdownContent,
   requestedNoteId,
   treeData,
+  notesMapByFullPathSlug,
+  notesMapBySimpleSlug,
 }: HomePageClientProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -58,9 +63,39 @@ export default function HomePageClient({
   };
 
   const wikiLinkOptions = {
-    hrefTemplate: (permalink: string) => {
-      const slug = filenameToSlug(permalink);
-      return `/?note=${slug}`;
+    pageResolver: (name: string) => {
+      // name은 [[링크 대상]] 안의 텍스트입니다. 예: "Kernel", "Operating Systems/Kernel"
+      // 1. 입력된 name 자체를 .md 확장자 제거 후 슬러그화 (사용자가 경로 포함하여 입력했을 수도 있음)
+      const permalinkAsSlug = filenameToSlug(name.replace(/\.md$/, ""));
+
+      // 2. 전체 경로 슬러그 맵에서 직접 찾아봅니다.
+      if (
+        notesMapByFullPathSlug &&
+        notesMapByFullPathSlug.has(permalinkAsSlug)
+      ) {
+        return [permalinkAsSlug]; // 정확히 일치하는 전체 경로 슬러그 반환
+      }
+
+      // 3. 단순 파일명 슬러그 맵에서 찾아봅니다. (사용자가 파일명만 입력한 경우)
+      //    이때 permalinkAsSlug는 실제로는 단순 파일명 슬러그일 가능성이 높습니다.
+      //    (예: 사용자가 [[Kernel]] 입력 -> name="Kernel" -> permalinkAsSlug="kernel")
+      if (notesMapBySimpleSlug && notesMapBySimpleSlug.has(permalinkAsSlug)) {
+        const possibleFullSlugs = notesMapBySimpleSlug.get(permalinkAsSlug);
+        if (possibleFullSlugs && possibleFullSlugs.size > 0) {
+          // 여러 개의 전체 경로가 매칭될 수 있습니다. (예: /notes/kernel, /projects/kernel)
+          // remark-wiki-link는 배열의 첫 번째 것을 사용합니다.
+          // TODO: 모호성 해결 로직을 추가할 수 있습니다 (예: 현재 페이지와 가장 가까운 경로 우선 등)
+          //       지금은 첫 번째 것을 반환합니다.
+          return Array.from(possibleFullSlugs);
+        }
+      }
+
+      // 4. 위에서 찾지 못했다면, 입력된 permalinkAsSlug를 그대로 사용 (최후의 수단)
+      return [permalinkAsSlug];
+    },
+    hrefTemplate: (resolvedPermalink: string) => {
+      // pageResolver가 반환한 (잠재적으로 전체 경로가 포함된) 슬러그를 사용합니다.
+      return `/?note=${resolvedPermalink}`;
     },
     wikiLinkClassName: "internal-link",
     aliasDivider: "|",

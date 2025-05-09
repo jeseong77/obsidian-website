@@ -128,7 +128,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
       .attr("fill", (d: NodeDatum) =>
         d.id === currentNodeId
           ? "var(--accent-selected-node)"
-          : "var(--accent-default)"
+          : "var(--accent-default-node)"
       )
       .style("cursor", "pointer")
       .on("click", (event, d: NodeDatum) => {
@@ -143,7 +143,15 @@ const NoteGraph: React.FC<NoteGraphProps> = ({
       .style("font-size", "9px")
       .style("text-anchor", "middle")
       .style("fill", (d: NodeDatum) =>
-        d.id === currentNodeId ? "var(--accent-selected-text)" : "var(--foreground)"
+        d.id === currentNodeId
+          ? "var(--accent-selected-text)"
+          : "var(--foreground)"
+      )
+      .style(
+        "font-weight",
+        (
+          d: NodeDatum // font-weight 스타일 추가
+        ) => (d.id === currentNodeId ? "bold" : "normal")
       )
       .style("pointer-events", "none");
 

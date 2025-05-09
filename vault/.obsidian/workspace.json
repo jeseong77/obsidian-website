@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Arts & Trivials.md",
+                "file": "Arts.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Arts & Trivials"
+              "title": "Arts"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Arts & Trivials.md",
+                "file": "Arts.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Arts & Trivials"
+              "title": "Backlinks for Arts"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Arts & Trivials.md",
+                "file": "Arts.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Arts & Trivials"
+              "title": "Outgoing links from Arts"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Arts & Trivials.md",
+                "file": "Arts.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Arts & Trivials"
+              "title": "Outline of Arts"
             }
           }
         ]
@@ -186,17 +186,20 @@
   "active": "b3253cec6dc3887d",
   "lastOpenFiles": [
     "Arts/Masterpieces of Western Literature.md",
+    "Arts.md",
+    "Computer Science/Computer Networks.md",
+    "Computer Science/Operating Systems.md",
+    "Computer Science/Operating Systems/Daemon.md",
+    "Computer Science/Operating Systems/Kernel.md",
+    "Computer Science.md",
+    "Computer Science/Operating Systems",
     "Arts/미학.md",
-    "Arts & Trivials.md",
     "Jeseong.md",
     "About Me.md",
-    "컴퓨터과학/Algorithms.md",
-    "컴퓨터과학/Computer Architecture.md",
+    "Computer Science/Algorithms.md",
+    "Computer Science/Computer Architecture.md",
     "Arts/문학.md",
     "Arts",
-    "Computer Science.md",
-    "컴퓨터과학/Computer Networks.md",
-    "컴퓨터과학/Operating Systems.md",
     "컴퓨터과학/dragonica.md"
   ]
 }

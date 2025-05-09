@@ -175,3 +175,22 @@ export async function buildGraphDataForRender(): Promise<{
   }
   return { nodes, edges };
 }
+
+// 초기화된 맵들에 접근할 수 있도록 합니다.
+export async function getNoteSlugMaps(): Promise<{
+  notesMapByFullPathSlug: Map<string, ProcessedNode>;
+  notesMapBySimpleSlug: Map<string, Set<string>>;
+}> {
+  if (!allProcessedNotes) {
+    // 또는 !notesMapByFullPathSlug 등으로 좀 더 명확하게 체크
+    await initializeNotesData();
+  }
+  // null일 가능성에 대한 방어 코드
+  if (!notesMapByFullPathSlug || !notesMapBySimpleSlug) {
+    throw new Error("Note maps could not be initialized.");
+  }
+  return {
+    notesMapByFullPathSlug,
+    notesMapBySimpleSlug,
+  };
+}
