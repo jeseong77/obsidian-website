@@ -24,8 +24,6 @@ function buildFileTree(notes: { slug: string; title: string }[]): TreeNode[] {
       const cumulativeSlugForThisSegment = pathPrefixForSegmentNameLookup
         ? `${pathPrefixForSegmentNameLookup}/${slugSegment}`
         : slugSegment;
-      // Try to find a note that *exactly matches* this cumulative slug
-      // (e.g., "Arts.md" for "arts" segment, or "Arts/Literature.md" for "literature" segment if it's the file itself)
       const definingNote = notes.find(
         (n) => n.slug === cumulativeSlugForThisSegment
       );
@@ -66,28 +64,20 @@ function buildFileTree(notes: { slug: string; title: string }[]): TreeNode[] {
         map.set(currentProcessingPathSlug, node);
 
         if (i === 0) {
-          // This is a root-level node
-          // Check if a node with this ID (possibly a different object if logic allows) is already in tree
           if (!tree.some((rootNode) => rootNode.id === node!.id)) {
             tree.push(node);
           }
         } else {
-          // This is a child node
           const parentNode = map.get(parentPathForLinking);
           if (
             parentNode &&
             parentNode.type === "folder" &&
             parentNode.children
           ) {
-            // Ensure child isn't already added (e.g. if multiple files in same folder processed)
             if (!parentNode.children.some((child) => child.id === node!.id)) {
               parentNode.children.push(node);
             }
           } else if (parentNode && parentNode.type === "file") {
-            // This case implies a parent was incorrectly typed as file and not yet converted.
-            // This should ideally be handled by the 'else' block below when the parent itself was processed.
-            // For robustness, convert it now.
-            // console.warn(`buildFileTree: Parent node ${parentNode.id} was 'file', converting to 'folder' to add child ${node.id}`);
             parentNode.type = "folder";
             parentNode.children = parentNode.children || [];
             if (!parentNode.children.some((child) => child.id === node!.id)) {
@@ -96,23 +86,10 @@ function buildFileTree(notes: { slug: string; title: string }[]): TreeNode[] {
           }
         }
       } else {
-        // 2. This path segment (node) already exists in the map. CRITICAL FIX HERE.
-        // Example: "Arts.md" created a "file" node for "arts".
-        // Now processing "Arts/문학.md". The segment "arts" is encountered again.
-        // Since it's not the last part of "Arts/문학.md" (i.e., i < parts.length - 1),
-        // this existing "arts" node must be a folder.
         if (node.type === "file" && i < parts.length - 1) {
           node.type = "folder";
-          node.children = node.children || []; // Ensure children array exists
-          // The name was likely set correctly when "Arts.md" (or similar) was processed.
-          // If originalPathSegmentsNames[i] (which is partOriginalName) provides a more accurate name
-          // for the folder (e.g., if the folder itself had a defining .md file like "Arts.md"),
-          // you might consider updating it, though usually the first-set name is fine.
-          // node.name = partOriginalName; // Optional: if folder name should be re-evaluated
+          node.children = node.children || [];
         }
-        // If it's already a folder, or a file that's correctly the last segment, no type change needed here for type.
-        // However, its name might need an update if the current `partOriginalName` is better.
-        // This can happen if a generic folder was created first, then a note defining its name (e.g. "Arts.md") is processed.
         if (
           node.name !== partOriginalName &&
           notes.find(
@@ -121,8 +98,6 @@ function buildFileTree(notes: { slug: string; title: string }[]): TreeNode[] {
               n.title === partOriginalName
           )
         ) {
-          // Update name if current processing gives a more specific title from a direct note match
-          // node.name = partOriginalName; // Be cautious with this, might not always be desired. Defaulting to first name is simpler.
         }
       }
     }

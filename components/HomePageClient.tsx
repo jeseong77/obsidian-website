@@ -1,7 +1,7 @@
 // components/HomePageClient.tsx
 "use client";
 
-import React, { useState, useEffect } from "react"; // useEffect는 현재 직접 사용되지 않지만, 향후 필요할 수 있어 유지
+import React, { useState, useEffect, useCallback } from "react"; // useEffect는 현재 직접 사용되지 않지만, 향후 필요할 수 있어 유지
 import AppBar from "./AppBar";
 import LeftSidebar from "./LeftSidebar";
 import NoteGraph from "./NoteGraph";
@@ -57,10 +57,16 @@ export default function HomePageClient({
   notesMapBySimpleSlug,
 }: HomePageClientProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
 
   const toggleMobileSidebar = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen);
   };
+
+  // 오른쪽 패널 토글 함수
+  const toggleRightPanel = useCallback(() => {
+    setIsRightPanelOpen((prev) => !prev);
+  }, []);
 
   const wikiLinkOptions = {
     pageResolver: (name: string) => {
@@ -165,7 +171,11 @@ export default function HomePageClient({
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
-        <LeftSidebar treeData={treeData} currentNodeId={requestedNoteId} />
+        <LeftSidebar
+          treeData={treeData}
+          currentNodeId={requestedNoteId}
+          onToggleRightPanel={toggleRightPanel} // 핸들러 전달
+        />
         <button
           onClick={toggleMobileSidebar}
           className="mt-auto p-2 w-full text-left bg-[var(--accent-default)] hover:bg-[var(--accent-selected)] text-[var(--foreground)] dark:text-[var(--foreground)] rounded transition-colors duration-150 ease-in-out"
@@ -176,7 +186,11 @@ export default function HomePageClient({
 
       {/* md, lg 화면: 고정된 사이드바 */}
       <div className="hidden md:flex md:flex-col md:w-64 h-full border-r border-[var(--border-color)] bg-[var(--card-background)] overflow-y-auto flex-shrink-0 transition-colors duration-150 ease-in-out">
-        <LeftSidebar treeData={treeData} currentNodeId={requestedNoteId} />
+        <LeftSidebar
+          treeData={treeData}
+          currentNodeId={requestedNoteId}
+          onToggleRightPanel={toggleRightPanel} // 핸들러 전달
+        />
       </div>
 
       {/* Main Content Area (MD 파일 내용 + 그래프) */}
@@ -225,43 +239,59 @@ export default function HomePageClient({
         </div>
 
         {/* 오른쪽 "Knowledge Tree" 영역 (lg 화면에서만 표시) */}
-        <div className="hidden lg:flex lg:flex-col lg:w-1/3 p-4 border-[var(--border-color)] bg-[var(--card-background)] transition-colors duration-150 ease-in-out">
-          {/* 안쪽 박스에 relative 추가 및 flex-col로 내부 요소 정렬, 둥근 모서리 */}
-          <div className="relative flex-grow p-3 border border-[var(--border-color)] flex flex-col">
-            <div className="flex justify-between items-center mb-2 flex-shrink-0">
+        {isRightPanelOpen && (
+          <div
+            className={
+              "hidden lg:flex lg:flex-col lg:w-1/3 p-4 border-l border-[var(--border-color)] bg-[var(--card-background)]"
+            } // ✨ 전체 패널의 왼쪽 경계선 유지, 패딩(p-4) 유지
+            // 애니메이션 관련 클래스는 일단 제거 (필요시 나중에 추가)
+          >
+            {/* 🌟 "Knowledge Tree" 영역 전체를 감싸는 내부 카드 스타일 (이곳에 border 적용) */}
+            <div className="relative flex-grow flex flex-col rounded-md ">
               {" "}
-              {/* 타이틀과 아이콘이 줄어들지 않도록 */}
-              <h2 className="text-lg font-semibold text-[var(--foreground)]">
-                Knowledge Tree
-              </h2>
-              <button
-                onClick={() =>
-                  console.log("Graph expand icon clicked (modal TBD)")
-                }
-                className="p-1 text-[var(--foreground-muted)] hover:text-[var(--foreground)] rounded-md" // 둥근 모서리 추가
-                aria-label="Expand Knowledge Tree"
-              >
-                <ScanOutline color="currentColor" height="20px" width="20px" />
-              </button>
-            </div>
-            {/* NoteGraph를 포함할 내부 div, 높이 조절 */}
-            <div className="flex-grow w-full min-h-0 overflow-hidden rounded-md">
-              {" "}
-              {/* 그래프 컨테이너도 둥근 모서리 및 overflow-hidden */}
-              {/* 예시: lg에서 고정 높이, xl에서 다른 높이. 필요에 맞게 조절 */}
-              <div className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[400px]">
+              {/* ✨ 여기에 메인 내부 카드 경계선 */}
+              {/* 헤더: 제목과 버튼 - 패딩으로 내부 여백 조정 */}
+              <div className="flex justify-between items-center p-3 mb-2 flex-shrink-0">
                 {" "}
-                {/* 타이틀 영역 높이(h2+mb-2)를 제외한 나머지 채우기 시도 */}
-                <NoteGraph
-                  initialNodes={initialNodes}
-                  initialEdges={initialEdges}
-                  currentNodeId={requestedNoteId}
-                />
+                {/* ✨ 헤더 내부 패딩 */}
+                <h2 className="text-lg font-semibold text-[var(--foreground)]">
+                  Knowledge Tree
+                </h2>
+                <button
+                  onClick={() => {
+                    console.log(
+                      "Knowledge Tree 내부의 Scan 아이콘 클릭됨 - 기능 정의 필요"
+                    );
+                  }}
+                  className="p-1 text-[var(--foreground-muted)] hover:text-[var(--foreground)] rounded-md"
+                  aria-label="Expand Knowledge Tree"
+                >
+                  <ScanOutline
+                    color="currentColor"
+                    height="20px"
+                    width="20px"
+                  />
+                </button>
+              </div>
+              {/* NoteGraph를 포함할 내용 영역 - 패딩으로 내부 여백 조정, 자체 border는 제거 */}
+              <div className="flex-grow w-full min-h-0 overflow-hidden rounded-b-md p-3 pt-0">
+                {" "}
+                {/* ✨ 내용 영역 패딩 (pt-0으로 위쪽 패딩은 헤더 mb로 대체), 둥근 모서리 하단만 적용 */}
+                {/* rounded-md는 이미 부모 div에 있으므로 여기서는 rounded-b-md만 필요할 수 있음 */}
+                <div className="w-full h-full">
+                  <NoteGraph
+                    initialNodes={initialNodes}
+                    initialEdges={initialEdges}
+                    currentNodeId={requestedNoteId}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+        {/* 오른쪽 "Knowledge Tree" 영역 끝 */}
       </main>
     </div>
   );
 }
+// HomePageClient.tsx

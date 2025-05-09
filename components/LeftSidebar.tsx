@@ -19,6 +19,7 @@ import type { TreeNode } from "../lib/utils";
 interface LeftSidebarProps {
   treeData: TreeNode[];
   currentNodeId: string;
+  onToggleRightPanel: () => void; // Prop 추가
 }
 
 const TreeItem: React.FC<{
@@ -145,6 +146,7 @@ const TreeItem: React.FC<{
 const LeftSidebar: React.FC<LeftSidebarProps> = ({
   treeData = [],
   currentNodeId,
+  onToggleRightPanel,
 }) => {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
     new Set()
@@ -203,7 +205,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
   return (
     <div className="p-4 bg-[var(--card-background)] h-full flex flex-col text-[var(--foreground)] transition-colors duration-150 ease-in-out">
       <h2 className="text-xl font-bold mb-4 transition-colors duration-150 ease-in-out">
-        Jeseong&apos;s Notes
+        Jeseong&apos;s
       </h2>
       <div className="relative mb-4">
         <input
@@ -227,9 +229,8 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
           {renderThemeIcon()}
         </button>
         <button
-          // onClick={() => setIsRightPanelOpen(!isRightPanelOpen)} // 현재 isRightPanelOpen 미사용
-          onClick={() => alert("Grid button clicked!")} // 임시 동작
-          className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded transition-colors duration-150 ease-in-out"
+          onClick={onToggleRightPanel} // 전달받은 핸들러 호출
+          className="p-2 hover:bg-[var(--accent-default)] dark:hover:bg-[var(--dark-button-icon-hover-bg,var(--accent-default))] rounded transition-colors duration-150 ease-in-out"
           title="Toggle Right Panel"
         >
           <GridOutline color={gridIconColor} height="18px" width="18px" />
