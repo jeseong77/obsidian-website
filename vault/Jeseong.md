@@ -2,5 +2,4 @@
 혹시 저에 대해 궁금하시다면 [[About Me|about me]].
 ### 지식은행:
 [[Computer Science]]
-[[Arts]]
 [[Studies]]
